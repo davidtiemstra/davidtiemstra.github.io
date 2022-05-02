@@ -1,3 +1,20 @@
+::-webkit-scrollbar {
+    width:10px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    border: solid 1px black;
+}
+
+::-webkit-scrollbar-button {
+    display:none;
+}
+
+a {
+    color:black;
+}
+
 .symbol {
     font-family: "Segoe UI Symbol";
 }
@@ -7,6 +24,8 @@
     flex: 1;
     margin-left:10px;
     padding: 36px;
+    height: inherit;
+    overflow-y: scroll;
 
     border-top:solid 1px black;
     border-left:solid 1px black;
@@ -27,11 +46,41 @@
     text-align: left;
 }
 
+
+.checkercolumn {
+    height: 168px;
+    float:left;
+}
+
+.checkerdiv {
+    float:left;
+}
+
+.line {
+    border:none;
+    border-top: solid 1px black;
+}
+
+#checkerboard {
+    position:absolute;
+    width:150vw;
+    height:168px;
+}
+
 #header {
-    height:172px;
+    position:absolute;
+    top:0;
+    left:0;
+    height:168px;
+    width:100vw;
+    background-image:url("banner3.png");
+    /* background-position-x:-343px; */
+    background-size: cover;
+    overflow: hidden;
 }
 
 #title {
+    position:absolute;
     margin-left: 36px;
     margin-top: 24px;
 
@@ -49,6 +98,8 @@
     position:absolute;
     right:36px;
     top:24px;
+    
+    background-color:rgba(255, 255, 255, 0.6);
     
     font-family: "CentSchbookMonoBTWXX-Rg";
     font-size: 16px;
@@ -76,6 +127,7 @@
     position: absolute;
     display:flex;
     flex-direction: row;
+    overflow: hidden;
     top:168px;
     bottom:0px;
     left:0px;
@@ -96,7 +148,7 @@
 }
 #about {
     display:normal;
-    flex: 2;
+    flex: 3;
 }
 
 ::-moz-selection { /* Code for Firefox */
