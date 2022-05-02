@@ -117,7 +117,7 @@ function createChecker(){
     checkerInterval = Math.floor(checkerTime / (gridsize[0]*gridsize[1]));
 
     checkers = false;
-    setTimeout(triggerCheckers, 8000);
+    setTimeout(triggerCheckers, 10000);
 }
 
 function triggerCheckers(){
