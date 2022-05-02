@@ -1,0 +1,28 @@
+/**
+ * @license
+ * MyFonts Webfont Build ID 4752375, 2022-05-01T15:06:02-0400
+ * 
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are 
+ * explicitly restricted from using the Licensed Webfonts(s).
+ * 
+ * You may obtain a valid license at the URLs below.
+ * 
+ * Webfont: CentSchbookMonoBTWXX-Rg by Bitstream
+ * URL: https://www.myfonts.com/fonts/bitstream/century-schoolbook/century-schoolbook-monospaced-10058/
+ * Copyright: Copyright 1990-2003 Bitstream Inc. All rights reserved.
+ * 
+ * 
+ * 
+ * © 2022 MyFonts Inc
+*/
+
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/4883f7");
+  
+@font-face {
+  font-family: "CentSchbookMonoBTWXX-Rg";
+  src: url('webFonts/CentSchbookMonoBTWXXRg/font.woff2') format('woff2'), url('webFonts/CentSchbookMonoBTWXXRg/font.woff') format('woff');
+}
+

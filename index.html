@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
+    <title>David Tiemstra</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.typekit.net/bkp7djm.css">
+    <link rel="stylesheet" type="text/css" href="MyFontsWebfontsKit.css">
+  </head>
+
+  <body>
+	<script src="index.js"></script>
+
+    <div id="header">
+        <div id="title">David<br>Tiem<span id="narrow">stra</span></div>
+        <div id="contact">
+            <span class="symbol">📫</span> <span style="text-decoration: underline">dntiemstra@hotmail.com</span> 
+            <span class="symbol">📌</span> Delft, South Holland 
+            <span class="symbol">📞</span> +316 ▯▯▯▯▯▯▯▯
+        </div>
+        <div id="subtitle">Experience,<br>Service<br>& Social Design</div>
+    </div>
+
+    <div id="mainpage">
+        <div id="navigation">
+            <button class="textbutton" id="edubut" onmouseenter="scrambleSymbols('edusym',true)" onmouseleave="scrambleSymbols('edusym',false)" onclick="toggleWindow('education')"> Education<br><span class="symbol" id="edusym" style="font-size:24px">📚📓🎓</span></button><br><br><br><br>
+            <button class="textbutton" id="expbut" onmouseenter="scrambleSymbols('expsym',true)" onmouseleave="scrambleSymbols('expsym',false)" onclick="toggleWindow('experience')"></span>Experience<br><span class="symbol" id="expsym" style="font-size:24px">💼📎📐</span></button><br><br><br><br>
+            <button class="textbutton" id="probut" onmouseenter="scrambleSymbols('prosym',true)" onmouseleave="scrambleSymbols('prosym',false)" onclick="toggleWindow('projects')"> Projects<br><span class="symbol" id="prosym" style="font-size:24px">📄📂💻</span></button><br><br><br><br>
+            <button class="textbutton" id="abobut" onmouseenter="scrambleSymbols('abosym',true)" onmouseleave="scrambleSymbols('abosym',false)" onclick="toggleWindow('about')"></span>About me<br><span class="symbol" id="abosym" style="font-size:24px">🤷❤✎</span></button><br><br><br><br>
+        </div>
+        
+        <div class="page" id="placeholder">
+            Hello.<br>
+            My name is David, and this is me up here<br><br>
+            Click one of the buttons on the left to learn more about me.
+        </div>
+
+        <div class="page" id="education">
+            <span style="font-weight:700">EDUCATION </span><br><br> 
+            
+            <span style="margin-left: 25px;">2021 - 2023</span> <br>
+            MSc Design for Interaction<br>
+            <span style="font-style:italic">Delft University of Technology</span><br><br>
+
+            <span style="margin-left: 25px;">2017 - 2020</span><br>
+            BSc Industrial Design Engineering<br>
+            <span style="font-style:italic">Delft University of Technology</span><br><br>
+            
+            <span style="margin-left: 25px;">2019</span><br>
+            Minor Industrial Design Engineering<br>
+            <span style="font-style:italic">Korean Advanced Institute of Technology</span><br><br>
+
+            <span style="margin-left: 25px;">2011 - 2017</span><br>
+            VWO<br>
+            <span style="font-style:italic">Stedelijk Gymnasium ‘s-Hertogenbosch</span>
+            </div>
+
+        <div class="page" id="experience">
+            <span style="font-weight:700">EXPERIENCE</span><br><br>
+            
+            <span style="margin-left: 25px;"></span>2021 - ><br>
+            Teaching Assistant DfI <br>
+            <span style="font-style:italic">Delft University of Technology</span><br><br>
+
+            <span style="margin-left: 25px;"></span>2017 - 2019 <br>
+            Tutor <br>
+            <span style="font-style:italic">StudentsPlus</span><br><br>
+
+            <span style="margin-left: 25px;"></span>2021 <br>
+            Editing Assistant <br>
+            <span style="font-style:italic">Oupro Media</span><br><br>
+
+            <span style="margin-left: 25px;"></span>2017 <br>
+            Freelance captioning <br>
+            <span style="font-style:italic">Rev.com</span>
+
+        </div>
+
+        <div class="page" id="projects">
+            <span style="font-weight:700">PROJECTS</span><br><br>
+            Under construction.
+        </div>
+
+        <div class="page" id="about">
+            <span style="font-weight:700">ABOUT ME</span><br><br>
+            Hello my name is David fuck this is the most important part but i aint got shiiiiiit
+        </div>
+    </div>
+
+  </body>
+</html>
