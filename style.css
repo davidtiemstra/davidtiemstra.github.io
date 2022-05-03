@@ -88,6 +88,11 @@ a {
     font-size: 86px;
     letter-spacing: -0.1em;
     line-height: 59px;
+    
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
 }
 
 #narrow {
