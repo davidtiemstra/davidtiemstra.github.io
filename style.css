@@ -11,12 +11,17 @@
     display:none;
 }
 
+body {
+    padding:0px;
+    margin: 0px;
+}
+
 a {
     color:black;
 }
 
 .symbol {
-    font-family: "Segoe UI Symbol";
+    font-family: "Segoe UI Symbol", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .page {
@@ -30,7 +35,7 @@ a {
     border-top:solid 1px black;
     border-left:solid 1px black;
 
-    font-family:"neue-haas-grotesk-text";
+    font-family:"neue-haas-grotesk-text", 'Neue Haas Grotesk Text Pro', Helvetica,  Arial, sans-serif;
     font-weight:400;
     font-size:12px;
 }
@@ -41,7 +46,7 @@ a {
     margin:0;
     padding:0;
     cursor: pointer;
-    font-family: "CentSchbookMonoBTWXX-Rg";
+    font-family: "CentSchbookMonoBTWXX-Rg", 'CentSchbook Mono BT', 'Courier New', Courier, monospace;
     font-size:14px;
     text-align: left;
 }
@@ -61,11 +66,6 @@ a {
     border-top: solid 1px black;
 }
 
-#checkerboard {
-    position:absolute;
-    width:150vw;
-    height:168px;
-}
 
 #header {
     position:absolute;
@@ -79,10 +79,18 @@ a {
     overflow: hidden;
 }
 
+#checkerboard {
+    position:relative;
+    z-index: 0;
+    width:150vw;
+    height:168px;
+    background-color: white;
+}
+
 #title {
     position:absolute;
-    margin-left: 36px;
-    margin-top: 24px;
+    left: 36px;
+    top: 24px;
 
     font-family:'Times New Roman', Times, serif;
     font-size: 86px;
@@ -99,6 +107,18 @@ a {
     letter-spacing: -0.07em;
 }
 
+#subtitle {
+    position:absolute;
+    top:98px;
+    left:300px;
+    width:174px;
+
+    font-family:"neue-haas-grotesk-text", 'Neue Haas Grotesk Text Pro', Helvetica,  Arial, sans-serif;
+    font-weight:400;
+    font-size:12px;
+    font-weight:700;
+}
+
 #contact {
     position:absolute;
     right:36px;
@@ -106,19 +126,9 @@ a {
     
     background-color:rgba(255, 255, 255, 0.6);
     
-    font-family: "CentSchbookMonoBTWXX-Rg";
+    font-family: "CentSchbookMonoBTWXX-Rg", 'CentSchbook Mono BT',  'Courier New', Courier, monospace;
     font-size: 16px;
     text-align: right;
-}
-
-#subtitle {
-    position:absolute;
-    width:174px;
-    right:36px;
-    top:62px;
-    font-family:"neue-haas-grotesk-text";
-    font-weight:400;
-    font-size:20px;
 }
 
 #navigation {

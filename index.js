@@ -116,6 +116,7 @@ function createChecker(){
     }
     checkerInterval = Math.floor(checkerTime / (gridsize[0]*gridsize[1]));
 
+    document.getElementById("checkerboard").style.setProperty("background-color", "rgba(255, 255, 255, 0)");
     checkers = false;
     setTimeout(triggerCheckers, 10000);
 }
