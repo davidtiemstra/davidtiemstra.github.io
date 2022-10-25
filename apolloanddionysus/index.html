@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Essay</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- some scripts im probably not using
+    <script src="https://threejs.org/build/three.js"></script> 
+    <script type="module" src="https://threejs.org/examples/jsm/utils/BufferGeometryUtils.js"></script>
+
+    <script src="https://raw.githubusercontent.com/mrdoob/three.js/master/build/three.js"></script>
+    <script type="module" src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/jsm/utils/BufferGeometryUtils.js"></script>
+
+    <script src="js/Three.js"></script>
+    <script type="module" src="js/BufferGeometryUtils.js"></script> 
+    -->
+
+    <!-- <div id="info">
+        window rotation:    <span id="text1">...</span><br> 
+        camera angle:       <span id="text2">...</span><br> 
+        camera x:           <span id="text3">...</span><br> 
+        phase:              <span id="text4">...</span></div> -->
+
+    <div id="loading"><span id="textloading">Loading...</span></div>
+
+    <div id="aw">
+        &nbsp;
+        <div id="awtext">
+            Afterword <br>
+            <br>
+            I hope you enjoyed my woefully pretentious essay. I almost called it a dialectic on the title page, but that would have left me open to the criticism that I don't understand what a dialectic is, and we can't be having that. <br>
+            <br>
+            In all seriousness, the topic discussed has been one I have thought about a lot recently and I think the conclusion quite closely reflects my genuine current thoughts on the matter. <br>
+            The assignment about creative energy was a big inspiration, because I don't think I really have creative energy and it reminded my of how much I dislike all these design methods and strategies, so that became Dionysus (irrationality and chaos), 
+            but I also often feel like I'm just being a lazy or incompetent contrarian when I say things like that, and that antithesis became Apollo (logic and prudence).<br>
+            <br>
+            I realize both characters are not that close to their mythological personas but if I'm being honest I just used their names for the sake of aesthetics and to look like I know about philosophy. <br>
+            <br>
+            Regards, <br>
+            David Tiemstra 
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://cdn.skypack.dev/three@0.129.0';
+        import { BufferGeometryUtils } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/utils/BufferGeometryUtils.js';
+        import { TextGeometry } from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
+        import { SVGLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/SVGLoader.js';
+        
+        const mouse = new THREE.Vector2();
+        let mousehold = false;
+        let spintrigger = true, partytrigger = false;
+        let speed = 0;
+
+        let i, j, k, m, i2, j2, i3, j3;
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0x000000 );
+        const stencilScene = new THREE.Scene();
+        const whiteroom = new THREE.Scene();
+        const blackroom = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        const camera2 = new THREE.PerspectiveCamera( 75, 5 / 5, 0.1, 1000 );
+
+        // declare window rotation variable
+        let rotx = 0;
+        let prevrotx;
+        let prevcr;
+
+        let phase = 0;
+
+        const svgurl = "https://raw.githubusercontent.com/davidtiemstra/apolloanddionysus/main/svg/svg";
+        
+        let textMesh1, textMesh2, textGeo;
+        let font = undefined;
+
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true});
+        renderer.setClearColor( 0x000000, 0 );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        camera.position.set( 0, 0, 30);
+        camera.lookAt( 0, 0, 0 );
+
+        const geometry = new THREE.SphereGeometry( 2, 30, 30 );
+        const whitemat = new THREE.MeshBasicMaterial( { color: 0xffffff} );
+        const blackmat = new THREE.MeshBasicMaterial({color: 0x000000});
+        const portalmaterial = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide});
+        const linemat1 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+        const bggeometry = new THREE.PlaneGeometry(100,100);
+        const whitebg = new THREE.Mesh(bggeometry,whitemat);
+        const blackbg = new THREE.Mesh(bggeometry,blackmat);
+        whiteroom.add( whitebg );
+        blackroom.add( blackbg );
+        whitebg.position.z = -30;
+        blackbg.position.z = -30;
+
+        const points = [[],[],[],[],[]];
+        const l = 10, ll = l*1.1;
+        const portl = 1.9* l;
+
+        const portalgeometry = new THREE.PlaneGeometry(portl,portl);
+        const portalplane = new THREE.Mesh(portalgeometry,portalmaterial);
+
+        stencilScene.add( portalplane );
+
+        points[0].push( new THREE.Vector3( -l, -ll, 0 ) );
+        points[0].push( new THREE.Vector3( -l, ll, 0 ) );
+
+        points[1].push( new THREE.Vector3( -ll, l, 0 ) );
+        points[1].push( new THREE.Vector3( ll, l, 0 ) );
+
+        points[2].push( new THREE.Vector3( l, ll, 0 ) );
+        points[2].push( new THREE.Vector3( l, -ll, 0 ) );
+        
+        points[3].push( new THREE.Vector3( -ll, -l, 0 ) );
+        points[3].push( new THREE.Vector3( ll, -l, 0 ) );
+
+        points[4].push( new THREE.Vector3( -portl/2 * 0.999, -portl/2 * 0.999, 0 ) );
+        points[4].push( new THREE.Vector3( -portl/2 * 0.999, portl/2 * 0.999, 0 ) );
+        points[4].push( new THREE.Vector3( portl/2 * 0.999, portl/2 * 0.999, 0 ) );
+        points[4].push( new THREE.Vector3( portl/2 * 0.999, -portl/2 * 0.999, 0 ) );
+        points[4].push( new THREE.Vector3( -portl/2 * 0.999, -portl/2 * 0.999, 0 ) );
+
+        const linebuff = [];
+        for(i=0;i<4;i++){
+            linebuff.push(new THREE.BufferGeometry().setFromPoints( points[i] ));
+        }
+        const linebuffmerge = BufferGeometryUtils.mergeBufferGeometries(linebuff);
+
+        const squarebuff = new THREE.BufferGeometry().setFromPoints( points[4] );
+
+        const lines = new THREE.LineSegments( linebuffmerge, linemat1 );
+        const square = new THREE.Line( squarebuff, linemat1 );
+        scene.add( lines );
+        blackroom.add( square );
+
+        const points2 = [[],[]];
+        points2[0].push( new THREE.Vector3( -1, 0, 0 ) );
+        points2[0].push( new THREE.Vector3( 1, 0, 0 ) );
+        points2[1].push( new THREE.Vector3( 0, -1, 0 ) );
+        points2[1].push( new THREE.Vector3( 0, 1, 0 ) );
+        const linebuff2 = []
+        for(i=0;i<2;i++){
+            linebuff2.push(new THREE.BufferGeometry().setFromPoints( points2[i] ));
+        }
+        const starbuff = BufferGeometryUtils.mergeBufferGeometries(linebuff2);
+
+        const stars = [];
+        for(i=0;i<150;i++){
+            stars.push(new THREE.LineSegments( starbuff, linemat1 ));
+            const spreadwidth = 400, spreadheight = 200;
+            stars[i].position.x = Math.floor(Math.random() * spreadwidth) - spreadwidth/2;
+            stars[i].position.y = Math.floor(Math.random() * spreadheight) - spreadheight/2;
+            stars[i].position.z = Math.floor(Math.random() * -100) - 40;
+            scene.add(stars[i]);
+        }
+
+        // create all the stuff that goes in the scenes
+        let textGeoArray = [];
+        const writeGroupArray = [];
+        const textMeshArray = [];
+        let parameters;
+        let checkWriting = true;
+
+        const loader2 = new SVGLoader();
+
+        for(i=0;i<22;i++){
+            textMeshArray.push([]);
+        }
+
+
+        function init(){
+
+            const loader = new THREE.FontLoader();
+            loader.load( 'https://raw.githubusercontent.com/mrdoob/three.js/master/examples/fonts/gentilis_regular.typeface.json', function ( response ) {
+                font = response;
+                createText();
+            } );
+
+            createWriting(0,0);
+        }
+
+        function createText() {
+
+            parameters = {
+
+                font: font,
+
+                size: 1.8,
+                height: 0.1,
+                curveSegments: 12
+
+            }
+
+            //add elements to all the pages
+            textGeoArray.push([new THREE.TextGeometry( "The Race Between", {font: font, size: 1.5, height: 0.1, curveSegments: 12} ),
+                new THREE.TextGeometry( "Apollo", {font: font, size: 4, height: 0.5, curveSegments: 12} ),
+                new THREE.TextGeometry( "and", {font: font, size: 1.5, height: 0.1, curveSegments: 12} ),
+                new THREE.TextGeometry( "dionysus", {font: font, size: 4, height: 0.5, curveSegments: 12} ),
+                new THREE.TextGeometry( "a design essay by david tiemstra", {font: font, size: 1.2, height: 0.1, curveSegments: 12} ),
+                new THREE.TextGeometry( "drag the mouse to the left", {font: font, size: 1.5, height: 0.1, curveSegments: 12} ),
+                new THREE.TextGeometry( "to go through the pages", {font: font, size: 1.5, height: 0.1, curveSegments: 12} )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Originality is irrelevant", parameters ),
+                new THREE.TextGeometry( "if something is Bad.", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Learn the rules", parameters ),
+                new THREE.TextGeometry( "before you even think", parameters ),
+                new THREE.TextGeometry( "of breaking them.", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "Easy to bash the methods  ", parameters ),
+                new THREE.TextGeometry( "when you are simply ", parameters ),
+                new THREE.TextGeometry( "too lazy", parameters ),
+                new THREE.TextGeometry( "to go through them.", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "You cannot forever hide", parameters ),
+                new THREE.TextGeometry( "your lack of skill and effort", parameters ),
+                new THREE.TextGeometry( "behind a wall of strangeness.", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "There is nothing there", parameters ),
+                new THREE.TextGeometry( "to comprehend", parameters ),
+                new THREE.TextGeometry( "other than a sad attempt", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "to confuse your audience", parameters ),
+                new THREE.TextGeometry( "into assuming", parameters ),
+                new THREE.TextGeometry( "you are smarter than them.", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "At least theirs is a genuine", parameters ),
+                new THREE.TextGeometry( "attempt to create something", parameters ),
+                new THREE.TextGeometry( "of value and a willingness", parameters ),
+                new THREE.TextGeometry( "to let oneself be judged.", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Tell me,", parameters ),
+                new THREE.TextGeometry( "how can something be ", parameters ),
+                new THREE.TextGeometry( "considered Good if it is,", parameters ),
+                new THREE.TextGeometry( "by definition impossible", parameters ),
+                new THREE.TextGeometry( "to be considered Bad?", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "You make no sense", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "just now you were professing", parameters ),
+                new THREE.TextGeometry( "the greatness of your", parameters ),
+                new THREE.TextGeometry( "originality,", parameters ),
+                new THREE.TextGeometry( "now you deny", parameters ),
+                new THREE.TextGeometry( "greatness exists at all?", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "And this eye", parameters ),
+                new THREE.TextGeometry( "is so unique and complex", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "it does not let itself", parameters ),
+                new THREE.TextGeometry( "be defined by Rules?", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "I see your point,", parameters ),
+                new THREE.TextGeometry( "but it appears", parameters ),
+                new THREE.TextGeometry( "you are being untruthful.", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "You are scared", parameters ),
+                new THREE.TextGeometry( "that if you were", parameters ),
+                new THREE.TextGeometry( "to judge yourself honestly,", parameters ),
+                new THREE.TextGeometry( "you would not like", parameters ),
+                new THREE.TextGeometry( "what you see.", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "How will you ever improve", parameters ),
+                new THREE.TextGeometry( "if you do not?", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Is what you call", parameters ),
+                new THREE.TextGeometry( "intuition", parameters ),
+                new THREE.TextGeometry( "not simply a set of rules", parameters ),
+                new THREE.TextGeometry( "you have internalized?", parameters )]);
+            textGeoArray.push([new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Arrogant as ever, I see.", parameters ),
+                new THREE.TextGeometry( "", parameters ),
+                new THREE.TextGeometry( "Let me propose a race,", parameters ),
+                new THREE.TextGeometry( "to see if I can", parameters ),
+                new THREE.TextGeometry( "formulate your rules", parameters ),
+                new THREE.TextGeometry( "faster than you can", parameters ),
+                new THREE.TextGeometry( "reinvent them.", parameters )]);
+
+
+
+            for(i=0;i<textGeoArray[0].length;i++){
+                textMeshArray[0].push(new THREE.Mesh( textGeoArray[0][i], blackmat ));
+                whiteroom.add(textMeshArray[0][i]);
+            }
+
+            textMeshArray[0][0].position.set(-13,11.5,-20);
+            textMeshArray[0][1].position.set(-13,7,-20);
+            textMeshArray[0][2].position.set(-13,5,-20);
+            textMeshArray[0][3].position.set(-10,2.2,-20);
+            textMeshArray[0][4].position.set(-13,-1,-20);
+            textMeshArray[0][5].position.set(-11,-8,-20);
+            textMeshArray[0][6].position.set(-10,-10,-20);
+
+            for(i=1;i<textGeoArray.length;i++){
+
+                for(j=0;j<textGeoArray[i].length;j++){
+                    textMeshArray[i*2].push(new THREE.Mesh( textGeoArray[i][j], blackmat ));
+                    textMeshArray[i*2][j].position.z = -20
+                    textMeshArray[i*2][j].position.x = -15
+                    textMeshArray[i*2][j].position.y = 11 - j*2.8
+                }
+
+            }
+
+            
+            document.getElementById("textloading").innerHTML = "";
+
+        }
+
+        function createWriting(i2,j2){
+            if(i2 < 11){
+            i3 = i2;
+            j3 = j2;
+            console.log(i3 + " " + j3);
+
+            const group = new THREE.Group();
+                    
+            loader2.load(
+                svgurl + j3 + "_" + (1 + 2*i3) + ".svg",
+                function( data ){
+                    const paths = data.paths;
+
+                    group.scale.multiplyScalar( 0.06 );
+                    group.position.set(- 16.1, 16.1, -25 + Math.round(Math.random() * 100)/15);
+                    group.rotation.y -= Math.round(Math.random()*100) / 500 - 0.1;
+                    group.scale.y *= - 1;
+
+                    for ( let k = 0; k < paths.length; k ++ ) {
+
+                        const path = paths[ k ];
+                        const svgshapes = SVGLoader.createShapes( path );
+
+                        for ( let m = 0; m < svgshapes.length; m ++ ) {
+
+                            const svgshape = svgshapes[ m ];
+                            const svggeometry = new THREE.ShapeGeometry( svgshape );
+                            const svgmesh = new THREE.Mesh( svggeometry, whitemat );
+                            group.add( svgmesh );
+
+                        }
+
+                    }
+
+                    textMeshArray[i3*2 + 1].push(group);
+                    // writeGroupArray.push(group);
+                    if(j3<2){
+                        createWriting(i3, j3+1);
+                    }
+                    else{
+                        createWriting(i3+1, 0);
+                    }
+
+                }
+            );
+            }
+        }
+
+        function animate() {
+
+            // if(writeGroupArray.length >= 33 && checkWriting){
+            //     for(i=0;i<11;i++){
+            //         for(j=0;j<3;j++){
+            //             textMeshArray[i*2 + 1].push(writeGroupArray[i*3+j]);
+            //             console.log(i*3 + j);
+            //         }
+            //     }
+            //     checkWriting = false;
+            // }
+
+            requestAnimationFrame( animate );
+
+            if(partytrigger){
+                partyTime();
+            }
+
+            // rotx += 0.01;   
+
+            camera.position.x = mouse.x * 3;
+            camera.lookAt( 0, 0, 0 );
+
+
+            // document.getElementById("text1").innerHTML = rotx;
+            // document.getElementById("text2").innerHTML = camera.rotation.y;
+            // document.getElementById("text3").innerHTML = camera.position.x;
+            // document.getElementById("text4").innerHTML = phase;
+
+            lines.rotation.y = rotx;
+            square.rotation.y = rotx;
+            portalplane.rotation.y = rotx;
+
+            renderer.autoClearStencil = false;
+            renderer.autoClearColor = false;
+            renderer.clearStencil();
+
+            const gl = renderer.getContext();
+
+            gl.enable(gl.STENCIL_TEST);
+            gl.stencilMask(0xff);
+            gl.stencilFunc(gl.ALWAYS, 1, 0xff);
+            gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+            renderer.render( stencilScene, camera );
+
+            gl.disable(gl.STENCIL_TEST);
+            renderer.render( scene, camera );
+
+            gl.enable(gl.STENCIL_TEST);
+            gl.stencilFunc(gl.EQUAL, 1, 0xff);
+            // gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+            if(phase%2 == 1 || partytrigger){
+                renderer.render( blackroom, camera);
+            }
+            else{
+                renderer.render( whiteroom, camera);
+            }
+            
+        }
+
+        function onMouseMove( event ) {
+            let oldx = mouse.x;
+
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            let newx = mouse.x;
+
+            if(mousehold){
+                let mouseshift = oldx - newx;
+                if(mouseshift>0 && rotx > (textMeshArray.length - 1) * Math.PI * -1 - 0.5){
+                    rotx -= mouseshift;
+                }
+                if(mouseshift<0 && rotx < 0.5){
+                    rotx -= mouseshift;
+                }
+            }
+
+            if(Math.abs(rotx%Math.PI) - Math.PI / 2 > -camera.rotation.y && Math.abs(prevrotx%Math.PI) - Math.PI / 2 <= -prevcr && Math.abs(rotx%Math.PI) - Math.PI / 2 < 1) {
+                phase++;
+                onPhaseChange(1);
+                console.log(phase);
+            }
+
+            if(Math.abs(rotx%Math.PI) - Math.PI / 2 < -camera.rotation.y && Math.abs(prevrotx%Math.PI) - Math.PI / 2 >= -prevcr && Math.abs(rotx%Math.PI) - Math.PI / 2 > -1) {
+                phase--;
+                onPhaseChange(-1);
+                console.log(phase);
+            }
+            
+            if(rotx < (textMeshArray.length - 1) * Math.PI * -1 + 0.5*Math.PI && spintrigger){
+                setTimeout(partyTime, 3000);
+                setTimeout(afterWord, 10000);
+                spintrigger = false;
+            }
+
+            prevrotx = rotx;
+            prevcr =  camera.rotation.y;
+
+        }
+
+        function onPhaseChange(direction){
+            if(phase%2 == 0 && spintrigger){
+                for(i=0;i<textMeshArray[phase - direction].length;i++){
+                    blackroom.remove(textMeshArray[phase - direction][i]);
+                }
+                for(i=0;i<textMeshArray[phase].length;i++){
+                    whiteroom.add(textMeshArray[[phase]][i]);
+                }
+            }
+            else if(spintrigger){
+                for(i=0;i<textMeshArray[phase - direction].length;i++){
+                    whiteroom.remove(textMeshArray[phase - direction][i]);
+                }
+                for(i=0;i<textMeshArray[phase].length;i++){
+                    blackroom.add(textMeshArray[[phase]][i]);
+                }
+            }
+        }
+
+        function partyTime(){
+            partytrigger = true;
+            
+            if(blackbg.position.z < 10){
+                blackbg.position.z += 0.1;
+            }
+
+            if(speed < 0.5){
+                speed += 0.001;
+            }
+
+            rotx -= speed;
+        }
+
+        function afterWord(){
+            document.getElementById("aw").style.visibility = "visible";
+            document.getElementById("awtext").style.visibility = "visible";
+        }
+
+        function onMouseDown( event ) {
+            mousehold = true;
+        }
+
+        function onMouseUp( event ) {
+            mousehold = false;
+        }
+
+        window.addEventListener( 'mousemove', onMouseMove, false );
+        window.addEventListener( 'mousedown', onMouseDown, false );
+        window.addEventListener( 'mouseup', onMouseUp, false );
+
+
+        init();
+
+        animate();
+
+    </script>
+</body>
+</html>

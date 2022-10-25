@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <!-- some scripts im probably not using
+    <script src="https://threejs.org/build/three.js"></script> 
+    <script type="module" src="https://threejs.org/examples/jsm/utils/BufferGeometryUtils.js"></script>
+
+    <script src="https://raw.githubusercontent.com/mrdoob/three.js/master/build/three.js"></script>
+    <script type="module" src="https://raw.githubusercontent.com/mrdoob/three.js/master/examples/jsm/utils/BufferGeometryUtils.js"></script>
+
+    <script src="js/Three.js"></script>
+    <script type="module" src="js/BufferGeometryUtils.js"></script> 
+    -->
+
+    <script type="module">
+        import * as THREE from 'https://cdn.skypack.dev/three@0.129.0';
+        import { BufferGeometryUtils } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/utils/BufferGeometryUtils.js';
+        
+        const mouse = new THREE.Vector2();
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color( 0x000000 );
+        const stencilScene = new THREE.Scene();
+        const whiteroom = new THREE.Scene();
+        const blackroom = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+        const camera2 = new THREE.PerspectiveCamera( 75, 5 / 5, 0.1, 1000 );
+
+        let rot = 0;
+
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor( 0x000000, 0 );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+
+        camera.position.set( 0, 0, 30);
+        camera.lookAt( 0, 0, 0 );
+
+        const geometry = new THREE.SphereGeometry( 2, 30, 30 );
+        const material = new THREE.MeshBasicMaterial( { color: 0xffffff} );
+        const portalmaterial = new THREE.MeshBasicMaterial({color: 0xffff00, side: THREE.DoubleSide});
+        const linemat1 = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+        const bggeometry = new THREE.PlaneGeometry(50,50);
+        const whitebg = new THREE.Mesh(bggeometry,material);
+        whiteroom.add( whitebg );
+        whitebg.position.z = -10
+
+        const stgeom = new THREE.BoxGeometry(4,4,4);
+        const fuckmat = new THREE.MeshBasicMaterial({color: 0x000000});
+        const triangle = new THREE.Mesh(stgeom,fuckmat);
+        whiteroom.add( triangle );
+
+
+        const points = [[],[],[],[]];
+        const l = 10, ll = l*1.1;
+
+        const portalgeometry = new THREE.PlaneGeometry(l*1.9,l*1.9);
+        const portalplane = new THREE.Mesh(portalgeometry,portalmaterial);
+
+        stencilScene.add( portalplane );
+
+        points[0].push( new THREE.Vector3( -l, -ll, 0 ) );
+        points[0].push( new THREE.Vector3( -l, ll, 0 ) );
+
+        points[1].push( new THREE.Vector3( -ll, l, 0 ) );
+        points[1].push( new THREE.Vector3( ll, l, 0 ) );
+
+        points[2].push( new THREE.Vector3( l, ll, 0 ) );
+        points[2].push( new THREE.Vector3( l, -ll, 0 ) );
+        
+        points[3].push( new THREE.Vector3( -ll, -l, 0 ) );
+        points[3].push( new THREE.Vector3( ll, -l, 0 ) );
+
+        const linebuff = [];
+        let i;
+        for(i=0;i<4;i++){
+            linebuff.push(new THREE.BufferGeometry().setFromPoints( points[i] ));
+        }
+        const linebuffmerge = BufferGeometryUtils.mergeBufferGeometries(linebuff);
+
+        const lines = new THREE.LineSegments( linebuffmerge, linemat1 );
+        scene.add( lines );
+
+        const points2 = [[],[]];
+        points2[0].push( new THREE.Vector3( -1, 0, 0 ) );
+        points2[0].push( new THREE.Vector3( 1, 0, 0 ) );
+        points2[1].push( new THREE.Vector3( 0, -1, 0 ) );
+        points2[1].push( new THREE.Vector3( 0, 1, 0 ) );
+        const linebuff2 = []
+        for(i=0;i<2;i++){
+            linebuff2.push(new THREE.BufferGeometry().setFromPoints( points2[i] ));
+        }
+        const starbuff = BufferGeometryUtils.mergeBufferGeometries(linebuff2);
+
+        const stars = [];
+        for(i=0;i<100;i++){
+            stars.push(new THREE.LineSegments( starbuff, linemat1 ));
+            const spreadwidth = 400, spreadheight = 200;
+            stars[i].position.x = Math.floor(Math.random() * spreadwidth) - spreadwidth/2;
+            stars[i].position.y = Math.floor(Math.random() * spreadheight) - spreadheight/2;
+            stars[i].position.z = Math.floor(Math.random() * -100) - 40;
+            scene.add(stars[i]);
+        }
+
+        function onMouseMove( event ) {
+
+            // calculate mouse position in normalized device coordinates
+            // (-1 to +1) for both components
+
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+        }
+
+
+        function animate() {
+            requestAnimationFrame( animate );
+
+            rot += 0.01;    
+
+            camera.position.x = mouse.x * 3;
+            camera.lookAt( 0, 0, 0 );
+            
+            lines.rotation.y = rot;
+            portalplane.rotation.y = rot;
+
+            triangle.rotation.y += 0.01;
+            triangle.rotation.x += 0.02;
+
+            // camera.position.x += 0.1;
+
+
+            // renderer.setViewport ( 0, 0, window.innerWidth, window.innerHeight );
+            // renderer.setScissor ( 0, 0, window.innerWidth, window.innerHeight );
+
+            renderer.autoClearStencil = false;
+            renderer.autoClearColor = false;
+            renderer.clearStencil();
+
+            const gl = renderer.getContext();
+
+            gl.enable(gl.STENCIL_TEST);
+            gl.stencilMask(0xff);
+            gl.stencilFunc(gl.ALWAYS, 1, 0xff);
+            gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE);
+            renderer.render( stencilScene, camera );
+
+            gl.disable(gl.STENCIL_TEST);
+            renderer.render( scene, camera );
+
+            // renderer.setViewport ( 0, window.innerHeight-100, window.innerWidth/2, window.innerHeight/2 );
+            // renderer.setScissor ( 0, 0, window.innerWidth/2, window.innerHeight/2 );
+
+            gl.enable(gl.STENCIL_TEST);
+            gl.stencilFunc(gl.EQUAL, 1, 0xff);
+            // gl.stencilOp(gl.KEEP, gl.KEEP, gl.KEEP);
+            renderer.render( whiteroom, camera);
+            
+        }
+
+        window.addEventListener( 'mousemove', onMouseMove, false );
+
+        animate();
+
+    </script>
+</body>
+</html>

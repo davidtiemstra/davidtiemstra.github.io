@@ -1,0 +1,46 @@
+body { 
+    margin: 0; 
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    display:block;
+}
+
+#info {
+	position: absolute;
+    color: white;
+	top: 10px;
+	text-align: left;
+    margin-left: 20px;
+	display:block;
+}
+
+#loading {
+    position: absolute;
+    color: black;
+	text-align: center;
+    width:100%;
+    top: 50%;
+	display:block;
+}
+
+#aw {
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    left: 35%;
+    right: 35%;
+    background-color: black;
+    visibility: hidden;
+}
+
+#awtext {
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 20px;
+    color: white;
+    visibility: hidden;
+}
