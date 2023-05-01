@@ -1,0 +1,43 @@
+@font-face {
+  font-family: DaVinci;
+  font-style: italic;
+  src: url("/typefaces/TRJNDaVinciItalic-Display.otf") format("opentype");
+}
+
+body { 
+  margin: 0; 
+  height: 100vh;
+  /* overflow: hidden; */
+}
+
+#bg {
+  position: fixed;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  z-index: -100;
+}
+
+#content {
+  position: relative;
+  padding: 30px;
+  max-width: 500px;
+  z-index: 100;  
+  margin-left:auto;
+  margin-right:auto;
+
+}
+
+#title {
+  color:rgb(0, 255, 0);
+  font-family: DaVinci, 'Times New Roman', sans-serif;
+  font-style: italic;
+  font-size: xxx-large;
+}
+
+#bodytext {
+  color:white;
+  text-align: justify;
+  font-family:'Neue Haas Grotesk Text Pro', Arial, sans-serif;
+  font-size: small;
+}
