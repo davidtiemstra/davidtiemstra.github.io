@@ -9,7 +9,7 @@ let newSymbols = [];
 let numSymbols = [[0,1,2],[3,4,5],[6,7,8],[9,10,11]];
 let allSymbols = ["📚","📓","🎓","💼","📎","📐","📄","📂","💻","🤷","❤","✎","📫","📌","📞"];
 
-const PH1 = "Hello.<br> My name is David.<br><br>Click one of the buttons on the left to learn more about me.";
+const PH1 = "Hello.<br> My name is David.<br><br>to be honest its been just over a year and i dont raelly identify with most of the stuff on this page anymore but the animations when you hover over the things on the left are cute so i figured id leave it up until i find the time to make something better soo check back later & enjoy for now :-)<br><br>Click one of the buttons on the left to learn more about me.";
 const PH2 = "Hello.<br> My name is David, and this is me up here ↑ .<br><br>Click one of the buttons on the left to learn more about me.";
 
 let checksize = 21;
@@ -118,7 +118,7 @@ function createChecker(){
 
     document.getElementById("checkerboard").style.setProperty("background-color", "rgba(255, 255, 255, 0)");
     checkers = false;
-    setTimeout(triggerCheckers, 10000);
+    setTimeout(triggerCheckers, 10000000);
 }
 
 function triggerCheckers(){
