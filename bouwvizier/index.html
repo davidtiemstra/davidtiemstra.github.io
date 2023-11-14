@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Unity WebGL Player | pdc reconfigurations</title>
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+
+    <p>
+      place objects in the control window (above) and view them along with their future effects in the window to the right.<br>
+      1. press the key corresponding with the object (see list).<br>
+      2. hover your mouse over your preferred location in the control window.<br>
+      3. press space.<br>
+      <br>
+      you can also select an objects by clicking it in the control window which will let you:<br>
+      - move the selected objects with the arrow keys or by right clicking a point on the control window<br>
+      - rotate it with the mouse wheel<br>
+      - remove it with backspace
+    </p>
+
+    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+
+    <p>
+    1 - low fence<br>
+    2 - high fence<br>
+    3 - small tree<br>
+    4 - large tree<br>
+    z - concrete bench<br>
+    x - normal bench<br>
+    c - picnic table<br>
+    v - street light<br>
+    b - trash bin<br>
+    n - fire cage<br>
+    <br>
+    q - low platform<br>
+    a - high platform<br>
+    w - low ladder<br>
+    s - high ladder<br>
+    e - low climbing wall<br>
+    d - high climbing wall<br>
+    r - low monkey bars<br>
+    f - high money bars<br>
+    t - low slide<br>
+    g - high slide<br>
+    y - low bridge<br>
+    h - high bridge<br>
+    j - low to high bridge<br>
+    <br>
+    i - normal swing<br>
+    7 - basket swing<br>
+    8 - roundabout<br>
+    9 - sphere roundabout<br>
+    m - spring rocker<br>
+    k - seesaw<br>
+    l - pingpong table
+    </p>
+
+    <script src="Build/webport.loader.js"></script>
+    <script>
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
+
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
+
+        document.body.style.textAlign = "left";
+      }
+
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/webport.data.unityweb",
+        frameworkUrl: "Build/webport.framework.js.unityweb",
+        codeUrl: "Build/webport.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "pdc reconfigurations",
+        productVersion: "0.1",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
+    </script>
+  </body>
+</html>
