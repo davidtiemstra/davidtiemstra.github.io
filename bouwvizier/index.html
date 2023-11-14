@@ -3,58 +3,76 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | pdc reconfigurations</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>bewoner's bouwvizier web prototype</title>
   </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <body>
 
-    <p>
-      place objects in the control window (above) and view them along with their future effects in the window to the right.<br>
+
+    <div id="instruction" style="text-align: center;">
+      <p>try a version of the prototype adapted for web here. instructions below.
+    </div>
+
+    <div id="player">
+
+      <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
+
+      <div id="object-keys"><p>
+      object keys:<br>
+      1 - low fence<br>
+      2 - high fence<br>
+      3 - small tree<br>
+      4 - large tree<br>
+      z - concrete bench<br>
+      x - normal bench<br>
+      c - picnic table<br>
+      v - street light<br>
+      b - trash bin<br>
+      n - fire cage<br>
+      <br>
+      q - low platform<br>
+      a - high platform<br>
+      w - low ladder<br>
+      s - high ladder<br>
+      e - low climbing wall<br>
+      d - high climbing wall<br>
+      r - low monkey bars<br>
+      f - high money bars<br>
+      t - low slide<br>
+      g - high slide<br>
+      y - low bridge<br>
+      h - high bridge<br>
+      j - low to high bridge<br>
+      <br>
+      i - normal swing<br>
+      7 - basket swing<br>
+      8 - roundabout<br>
+      9 - sphere roundabout<br>
+      m - spring rocker<br>
+      k - seesaw<br>
+      l - pingpong table
+      </p></div>
+      
+    </div>  
+
+    <div id="instruction">
+      <br>
+      place objects in the control window on the left and view them in 3d along with their future effects in the window to the right:<br>
       1. press the key corresponding with the object (see list).<br>
       2. hover your mouse over your preferred location in the control window.<br>
       3. press space.<br>
       <br>
       you can also select an objects by clicking it in the control window which will let you:<br>
-      - move the selected objects with the arrow keys or by right clicking a point on the control window<br>
+      - move the selected object with the arrow keys or by right clicking a point on the control window<br>
       - rotate it with the mouse wheel<br>
-      - remove it with backspace
-    </p>
+      - remove it with backspace<br>
+      you can also select, move and rotate the white square with the red dot in the same way as any other object, this controls the camera.
+      </p>
+    </div>
 
-    <canvas id="unity-canvas" width=960 height=600 style="width: 960px; height: 600px; background: #231F20"></canvas>
-
-    <p>
-    1 - low fence<br>
-    2 - high fence<br>
-    3 - small tree<br>
-    4 - large tree<br>
-    z - concrete bench<br>
-    x - normal bench<br>
-    c - picnic table<br>
-    v - street light<br>
-    b - trash bin<br>
-    n - fire cage<br>
-    <br>
-    q - low platform<br>
-    a - high platform<br>
-    w - low ladder<br>
-    s - high ladder<br>
-    e - low climbing wall<br>
-    d - high climbing wall<br>
-    r - low monkey bars<br>
-    f - high money bars<br>
-    t - low slide<br>
-    g - high slide<br>
-    y - low bridge<br>
-    h - high bridge<br>
-    j - low to high bridge<br>
-    <br>
-    i - normal swing<br>
-    7 - basket swing<br>
-    8 - roundabout<br>
-    9 - sphere roundabout<br>
-    m - spring rocker<br>
-    k - seesaw<br>
-    l - pingpong table
-    </p>
+    <div id="bot">
+      <p>made by david tiemstra</p>
+    </div>
 
     <script src="Build/webport.loader.js"></script>
     <script>
