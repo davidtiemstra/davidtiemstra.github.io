@@ -17,8 +17,9 @@ let ts = (Date.now()-t0)/1000;
 let width, height, center;
 let path = new Path();
 let ground = new Path();
+let thread = new Path();
 let mousePos = view.center;
-path.strokeColor = "black";
+thread.strokeColor = "black";
 ground.strokeColor = "black";
 
 let noiseamp = 10;
@@ -28,6 +29,9 @@ let trunkWidth = 40;
 let xStep = trunkWidth/steps;
 let period = 0.02
 let noiseSpeed = 0.05;
+
+let stDist = 4;
+let embroideryScale = 3;
 
 
 initializePath();
@@ -52,11 +56,29 @@ function initializePath() {
         ));
     }
 
+    
+    // //generate spread stitches
+    // thread.segments = [];
+    // thread.add(new Point(center.x-trunkWidth/2, center.y));
+    // let a=0
+
+    // for(let t=1;t<steps;t++){
+    //     //calculate distance w pythagoras bc im a dumb idiot
+    //     let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
+
+    //     if(aDist>stDist){
+    //         thread.add(new Point(
+    //             Math.round(path.segments[t].point.x * embroideryScale), 
+    //             Math.round(path.segments[t].point.y * embroideryScale)
+    //         ));
+    //         a=t;
+    //     }
+    // }
+
     growIt();
 }
 
 function growIt(){
-    
     let tadjust = 0;
 
     for(let t=1; t<steps; t++){
@@ -83,6 +105,25 @@ function growIt(){
 
         path.segments[t].point.x = path.segments[t-1].point.x + xStep +                    (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.x;
         path.segments[t].point.y = path.segments[t-1].point.y + 3 * Math.cos(period * t) + (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.y;
+    }
+
+
+    //spread stitches
+    thread.segments = [];
+    thread.add(new Point(center.x-trunkWidth/2, center.y));
+    let a=0
+
+    for(let t=1;t<steps;t++){
+        //calculate distance w pythagoras bc im a dumb idiot
+        let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
+
+        if(aDist>stDist){
+            thread.add(new Point(
+                Math.round(path.segments[t].point.x), 
+                Math.round(path.segments[t].point.y)
+            ));
+            a=t;
+        }
     }
 }
 
@@ -122,7 +163,13 @@ function sampleField(x,y,fieldtype){
   }
 
 view.onFrame = function(event) {
+
     ts = (Date.now()-t0)/1000;
+
+    if(event.count%60==0){
+        console.log('avg fps: '+ (event.count/event.time));
+    }
+
     growIt();
     
 }
