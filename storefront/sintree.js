@@ -5,6 +5,7 @@ import { aleaFactory } from 'https://cdn.jsdelivr.net/npm/alea-generator@1.0.0/+
 // const seed = 0.970508064049187; //provide your own seed
 const seed = Math.round(Math.random()*10000); //generate random seed
 console.log('seed: ' + seed);
+document.getElementById('seed').innerHTML = seed;
 const prng = aleaFactory(seed);
 const noise = createNoise3D(prng.random);
 const t0 = Date.now();
@@ -16,7 +17,7 @@ paper.setup('canvas'); // Create an empty project and a view for the canvas:
 
 let ts = (Date.now()-t0)/1000;
 let width, height, center;
-let path = new Path();
+let path = [];
 let ground = new Path();
 let thread = new Path();
 let mousePos = view.center;
@@ -35,7 +36,6 @@ let stDist = 10;
 let embroideryScale = 3;
 
 view.scale(view.resolution/72);
-
 initializePath();
 
 function initializePath() {
@@ -45,17 +45,17 @@ function initializePath() {
 
     ground.segments = [];
     ground.add(
-        new Point(center.x-trunkWidth*2, center.y),
-        new Point(center.x+trunkWidth*2, center.y)
+        new Point(center.x-trunkWidth*1.5, center.y),
+        new Point(center.x+trunkWidth*1.5, center.y)
     );
 
-    path.segments = [];
-    path.add(new Point(center.x-trunkWidth/2, center.y));
+    path = [];
+    path.push({x:center.x-trunkWidth/2, y:center.y});
     for(let t=1; t<steps; t++){
-        path.add(new Point(
-            path.segments[t-1].point.x + xStep,
-            path.segments[t-1].point.y + 3 * Math.cos(period * t)
-        ));
+        path.push({
+            x:path[t-1].x + xStep,
+            y:path[t-1].y + 3 * Math.cos(period * t)
+        });
     }
 
     
@@ -66,12 +66,12 @@ function initializePath() {
 
     for(let t=1;t<steps;t++){
         //calculate distance w pythagoras bc im a dumb idiot
-        let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
+        let aDist = Math.sqrt((path[t].x - path[a].x)**2 + (path[t].y-path[a].y)**2);
 
         if(aDist>stDist){
             thread.add(new Point(
-                Math.round(path.segments[t].point.x), 
-                Math.round(path.segments[t].point.y)
+                Math.round(path[t].x), 
+                Math.round(path[t].y)
             ));
             a=t;
         }
@@ -96,17 +96,17 @@ function growIt(){
         
         if(t%((1/period)*PI)>(0.5/period)*PI && tadjust < t-1){
         tadjust += 2
-        fieldval = sampleField(path.segments[t-tadjust].point.x, path.segments[t-tadjust].point.y, fieldtype);
+        fieldval = sampleField(path[t-tadjust].x, path[t-tadjust].y, fieldtype);
         fieldval = {x:-1*fieldval.x, y:-1*fieldval.y};
         }
         
         else{
         tadjust = 0;
-        fieldval = sampleField(path.segments[t-1].point.x, path.segments[t-1].point.y, fieldtype);
+        fieldval = sampleField(path[t-1].x, path[t-1].y, fieldtype);
         }
 
-        path.segments[t].point.x = path.segments[t-1].point.x + xStep +                    (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.x;
-        path.segments[t].point.y = path.segments[t-1].point.y + 3 * Math.cos(period * t) + (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.y;
+        path[t].x = path[t-1].x + xStep +                    (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.x;
+        path[t].y = path[t-1].y + 3 * Math.cos(period * t) + (0.8 * Math.abs(Math.sin(period * t))**2 + 0.2)  * fieldval.y;
     }
 
 
@@ -115,24 +115,27 @@ function growIt(){
     let n=1;
     for(let t=1;t<steps;t++){
         //calculate distance w pythagoras bc im a dumb idiot
-        let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
+        let aDist = Math.sqrt((path[t].x - path[a].x)**2 + (path[t].y-path[a].y)**2);
         
         if(aDist>stDist){
             if(n>=thread.segments.length){
                 thread.add(new Point(center));
             }
 
-            thread.segments[n].point.x = Math.round(path.segments[t].point.x); 
-            thread.segments[n].point.y = Math.round(path.segments[t].point.y);
+            thread.segments[n].point.x = Math.round(path[t].x); 
+            thread.segments[n].point.y = Math.round(path[t].y);
             a=t;
             n++;
         }
     }
 
-    for(let i=n; i<thread.segments.length; i++){
-        thread.segments[i].point.x = center.x + 0.5*trunkWidth;
-        thread.segments[i].point.y = center.y;
+    if(n<thread.segments.length){
+        thread.segments = thread.segments.slice(0,n);
     }
+    // for(let i=n; i<thread.segments.length; i++){
+    //     thread.segments[i].point.x = center.x + 0.5*trunkWidth;
+    //     thread.segments[i].point.y = center.y;
+    // }
 }
 
 function sampleField(x,y,fieldtype){
@@ -174,9 +177,9 @@ view.onFrame = function(event) {
 
     ts = (Date.now()-t0)/1000;
 
-    if(event.count%60==0){
-        console.log('avg fps: '+ (event.count/event.time));
-    }
+    // if(event.count%60==0){
+    //     console.log('avg fps: '+ (event.count/event.time));
+    // }
 
     growIt();
     
