@@ -10,6 +10,7 @@ const noise = createNoise3D(prng.random);
 const t0 = Date.now();
 
 paper.install(window);
+
 // window.onload = function() { // they say it wont work if i dont do this but idk
 paper.setup('canvas'); // Create an empty project and a view for the canvas:
 
@@ -30,7 +31,7 @@ let xStep = trunkWidth/steps;
 let period = 0.02
 let noiseSpeed = 0.05;
 
-let stDist = 4;
+let stDist = 10;
 let embroideryScale = 3;
 
 
@@ -57,23 +58,23 @@ function initializePath() {
     }
 
     
-    // //generate spread stitches
-    // thread.segments = [];
-    // thread.add(new Point(center.x-trunkWidth/2, center.y));
-    // let a=0
+    //generate spread stitches
+    thread.segments = [];
+    thread.add(new Point(center.x-trunkWidth/2, center.y));
+    let a=0
 
-    // for(let t=1;t<steps;t++){
-    //     //calculate distance w pythagoras bc im a dumb idiot
-    //     let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
+    for(let t=1;t<steps;t++){
+        //calculate distance w pythagoras bc im a dumb idiot
+        let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
 
-    //     if(aDist>stDist){
-    //         thread.add(new Point(
-    //             Math.round(path.segments[t].point.x * embroideryScale), 
-    //             Math.round(path.segments[t].point.y * embroideryScale)
-    //         ));
-    //         a=t;
-    //     }
-    // }
+        if(aDist>stDist){
+            thread.add(new Point(
+                Math.round(path.segments[t].point.x), 
+                Math.round(path.segments[t].point.y)
+            ));
+            a=t;
+        }
+    }
 
     growIt();
 }
@@ -89,7 +90,7 @@ function growIt(){
         const PI = Math.PI;
     
         if(t%((2/period)*PI) > (1/period)*PI){
-        fieldtype = 'noise';
+        fieldtype = 'fbm2';
         }
         
         if(t%((1/period)*PI)>(0.5/period)*PI && tadjust < t-1){
@@ -109,21 +110,27 @@ function growIt(){
 
 
     //spread stitches
-    thread.segments = [];
-    thread.add(new Point(center.x-trunkWidth/2, center.y));
-    let a=0
-
+    let a=0;
+    let n=1;
     for(let t=1;t<steps;t++){
         //calculate distance w pythagoras bc im a dumb idiot
         let aDist = Math.sqrt((path.segments[t].point.x - path.segments[a].point.x)**2 + (path.segments[t].point.y-path.segments[a].point.y)**2);
-
+        
         if(aDist>stDist){
-            thread.add(new Point(
-                Math.round(path.segments[t].point.x), 
-                Math.round(path.segments[t].point.y)
-            ));
+            if(n>=thread.segments.length){
+                thread.add(new Point(center));
+            }
+
+            thread.segments[n].point.x = Math.round(path.segments[t].point.x); 
+            thread.segments[n].point.y = Math.round(path.segments[t].point.y);
             a=t;
+            n++;
         }
+    }
+
+    for(let i=n; i<thread.segments.length; i++){
+        thread.segments[i].point.x = center.x + 0.5*trunkWidth;
+        thread.segments[i].point.y = center.y;
     }
 }
 
@@ -181,17 +188,5 @@ view.onMouseMove = function(event) {
 view.onResize = function(event) {
     initializePath();
 }
-
-
-// path.moveTo(start);
-// // Note that the plus operator on Point objects does not work
-// // in JavaScript. Instead, we need to call the add() function:
-// path.lineTo(start.add([ 200, -50 ]));
-
-
-function onMouseDown(event) {
-
-}
-
 
 // }
