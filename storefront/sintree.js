@@ -34,7 +34,7 @@ let noiseSpeed = 0.05;
 let stDist = 10;
 let embroideryScale = 3;
 
-view.scale(view.pixelRatio);
+view.scale(view.resolution/72);
 
 initializePath();
 
