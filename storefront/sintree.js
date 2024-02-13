@@ -35,6 +35,9 @@ let noiseSpeed = 0.05;
 let stDist = 10;
 let embroideryScale = 3;
 
+let pauseButton, pauseRect, pauseText, orderButton;
+let paused = false;
+
 view.scale(view.resolution/72);
 initializePath();
 
@@ -42,6 +45,43 @@ function initializePath() {
     center = view.center;
     width = view.size.width;
     height = view.size.height;
+
+    pauseRect = new Shape.Rectangle({
+        point: new Point(center.x-25, center.y+120),
+        size: new Size(50,20),
+        strokeColor: 'black',
+        fillColor: 'white'
+    });
+
+    pauseText = new PointText({
+        point: new Point(center.x, center.y+133),
+        fillColor: "black",
+        justification: 'center',
+        content: "pause"
+    });
+
+    pauseButton = new Group([pauseRect,pauseText]);
+
+    
+    orderButton = pauseButton.clone();
+    orderButton.copyAttributes(pauseButton);
+    orderButton.position.y += 30;
+    orderButton.lastChild.content = 'order';
+
+    let buttons = new Group([pauseButton, orderButton]);
+
+    for(let i=0;i<buttons.children.length;i++){
+        buttons.children[i].onMouseEnter = function(event){ this.firstChild.fillColor = 'black'; this.lastChild.fillColor = 'white';};
+        buttons.children[i].onMouseLeave = function(event){ this.firstChild.fillColor = 'white'; this.lastChild.fillColor = 'black';};
+        buttons.children[i].onMouseUp = function(event){ this.firstChild.fillColor = 'black'; this.lastChild.fillColor = 'white';};
+        buttons.children[i].onMouseDown = function(event){this.firstChild.fillColor = 'white'; this.lastChild.fillColor = 'black';};
+    }
+
+    pauseButton.onMouseDown = function(event){
+        this.firstChild.fillColor = 'white'; this.lastChild.fillColor = 'black';
+        paused = !paused;
+    };
+
 
     ground.segments = [];
     ground.add(
@@ -175,7 +215,10 @@ function sampleField(x,y,fieldtype){
 
 view.onFrame = function(event) {
 
-    ts = (Date.now()-t0)/1000;
+    if(!paused){
+        ts += event.delta;
+    }
+    
 
     // if(event.count%60==0){
     //     console.log('avg fps: '+ (event.count/event.time));
