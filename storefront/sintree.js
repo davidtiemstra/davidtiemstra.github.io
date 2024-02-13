@@ -35,7 +35,7 @@ let noiseSpeed = 0.05;
 let stDist = 10;
 let embroideryScale = 3;
 
-let pauseButton, pauseRect, pauseText, orderButton;
+let pauseButton, pauseRect, pauseText, orderButton, buttons;
 let paused = false;
 
 view.scale(view.resolution/72);
@@ -45,6 +45,10 @@ function initializePath() {
     center = view.center;
     width = view.size.width;
     height = view.size.height;
+
+    if(buttons){
+        buttons.remove();
+    }
 
     pauseRect = new Shape.Rectangle({
         point: new Point(center.x-25, center.y+120),
@@ -68,7 +72,7 @@ function initializePath() {
     orderButton.position.y += 30;
     orderButton.lastChild.content = 'order';
 
-    let buttons = new Group([pauseButton, orderButton]);
+    buttons = new Group([pauseButton, orderButton]);
 
     for(let i=0;i<buttons.children.length;i++){
         buttons.children[i].onMouseEnter = function(event){ this.firstChild.fillColor = 'black'; this.lastChild.fillColor = 'white';};
