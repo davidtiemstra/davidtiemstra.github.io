@@ -54,8 +54,8 @@ class DataScreen {
             textStyle(BOLD);
             //this is fucked
             fill(0, 255*((this.cloudBalls.length-this.maxBalls*0.1)/this.maxBalls*5));
-            text(min(123*round(millis()-this.startTime),this.constants.totaal), 0.37*width, 0.47*height)
-            text(this.variables.jaren, 0.53*width, 0.51*height)
+            text(min(423*round(millis()-this.startTime),this.constants.totaal), 0.34*width, 0.47*height)
+            text(this.variables.jaren, 0.57*width, 0.51*height)
         }
         
         if(this.index == 3){
@@ -96,7 +96,7 @@ class DataScreen {
                 const endAngle = total/103 * 2*PI;
                 total+=0.5;
 
-                const colOffset = noise(i*100)*100-20;
+                const colOffset = noise(i*100)*100+40;
                 fill(13+colOffset,105+colOffset,55+colOffset);
                 stroke(0);
                 strokeWeight(2);
@@ -161,35 +161,11 @@ class DataScreen {
         }
         
         if(this.index == 6){
-            // zoveelin de buurt
-            this.drawCloud(0.5*width,0.46*height,0.3*width,0.15*height, "circle");
-
-            textAlign(CENTER);
-            textSize(TEXTBIG);
-            textStyle(BOLD);
-            //this is fucked
-            fill(0, 255*((this.cloudBalls.length-this.maxBalls*0.1)/this.maxBalls*5));
-            text(this.variables[0], 0.48*width, 0.4*height);
-            
-        }
-        
-        if(this.index == 7){
-            // gerda
-            this.drawCloud(0.5*width,0.46*height,0.3*width,0.15*height, "circle");
-            
-        }
-        
-        if(this.index == 8){
             // jaarwens
             this.drawCloud(0.5*width,0.46*height,0.3*width,0.15*height, "circle");
             
         }
         
-        if(this.index == 9){
-            // delen
-            this.drawCloud(0.1*width,0.06*height,0.8*width,0.8*height, "rect");
-
-        }
     }
 
     displayText(){
@@ -257,7 +233,8 @@ class DataScreen {
             
             circle(this.cloudBalls[i].x,this.cloudBalls[i].y,this.cloudBalls[i].size+4);
         }
-        fill(252)
+        // fill(252)
+        fill(cloudColors[phase]);
         for(let i=this.cloudBalls.length-1; i>=0; i--){
             circle(this.cloudBalls[i].x,this.cloudBalls[i].y,this.cloudBalls[i].size);
         }
