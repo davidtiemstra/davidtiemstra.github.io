@@ -160,7 +160,7 @@ function setup() {
 function draw() {
     background(255);
 
-    if(phase>0 && millis() - screens[phase].startTime > 2000 && !movePhase){
+    if(phase>0 && millis() - screens[phase].startTime > 4000 && !movePhase){
         nextScreen();
     }
 
