@@ -31,7 +31,7 @@ body {
     margin-right: 5%;
 }
 
-img {
+#image {
     max-width:95%;
     overflow: hidden;
     margin: auto;
