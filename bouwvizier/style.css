@@ -32,8 +32,9 @@ body {
 }
 
 img {
-    max-width:90%;
-    margin:auto;
+    max-width:95%;
+    overflow: hidden;
+    margin: auto;
 }
 
 #object-keys {
