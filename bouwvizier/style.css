@@ -31,6 +31,9 @@ body {
     margin-right: 5%;
 }
 
+img {
+    max-width:100%;
+}
 
 #object-keys {
     /* display: inline-block; */
