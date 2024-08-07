@@ -31,6 +31,10 @@ body {
     margin-right: 5%;
 }
 
+img {
+    max-width:100%
+}
+
 #image {
     max-width:95%;
     overflow: hidden;
