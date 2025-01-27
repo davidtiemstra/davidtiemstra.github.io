@@ -73,7 +73,7 @@ a {
     left:0;
     height:168px;
     width:100vw;
-    background-image:url("banner3.png");
+/*     background-image:url("banner3.png"); */
     /* background-position-x:-343px; */
     background-size: cover;
     overflow: hidden;
